@@ -1,0 +1,16 @@
+{
+  "name": "xapiValidator",
+  "version": "1.0.0",
+  "author": "Zachary Pierce",
+  "description": "A validator for Experience API (xAPI) statements",
+  "keywords":["xAPI", "validator", "lrs", "json"],
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.6.6"
+  },
+  "devDependencies":{
+    "chai": "*",
+    "mocha": "*",
+    "underscore": "*"
+  }
+}
