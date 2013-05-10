@@ -37,24 +37,26 @@
                 <article>
                     <header>
                         <h2>Overview</h2>
-                        <p>This site demonstrates the open source <a href="">xAPI Validator Javascript library</a> in action.  Give it a whirl!</p>
+                        <p>This site demonstrates the open source <a href="http://github.com/ZackPierce/xAPI-Validator-JS">xAPI Validator Javascript library</a> in action.</p>
                     </header>
                     <section>
                         <h2>Statement JSON</h2>
-                        <p>Insert your xAPI / Tin-Can statement JSON here.</p>
+                        <p>Insert your xAPI statement JSON below or try a <button data-bind="click: randomInvalidStatement">premade invalid one</button>.</p>
                         <textarea id="rawJSON" data-bind="value : source, valueUpdate : 'afterkeydown'"></textarea>
                         <button data-bind="click : formatJson">Format JSON</button>
                     </section>
                     <section>
                         <h2>Validation Results</h2>
-                        <div data-bind="if : report() && report().instance && errors().length == 0">Congratulations! You've entered a completely valid statement!</div>
+                        <div data-bind="if : report() && report().instance && errors().length == 0">Congratulations! You've entered a completely valid statement!
+                        <p>Would you like to see a <button data-bind="click : randomInvalidStatement">random invalid statement</button>?
+                        </div>
                         <div id="gridPlaceholder" class="gridStyle" data-bind="koGrid : gridOptions, visible : report() && errors().length != 0"/>
                     </section>
                 </article>
 
                 <aside>
                     <h3>Experience API?</h3>
-                    <p><a href="http://www.adlnet.gov/tla/experience-api">The xAPI</a> is an <a href="https://github.com/adlnet/xAPI-Spec/blob/master/xAPI.md">open source</a> specification to help track learning experiences.</p>
+                    <p><a href="http://www.adlnet.gov/tla/experience-api">The xAPI</a> is an <a href="http://github.com/adlnet/xAPI-Spec/blob/master/xAPI.md">open source</a> specification to help track learning experiences.</p>
                     <h3>Caveats</h3>
                     <p>The validator targets the 1.0.0 version of the Experience API, so statements that may be valid under the 0.9.0 or 0.9.5 versions could display errors.</p>
                 </aside>

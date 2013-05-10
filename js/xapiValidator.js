@@ -262,7 +262,7 @@
         var errors = errors || [],
             trace = trace || "actor";
         if (actor === null || actor === undefined) {
-            errors.push(new ValidationError(traceToString(trace) + "Actor must be provided.", MUST_VIOLATION));
+            errors.push(new ValidationError(traceToString(trace), "Actor must be provided.", MUST_VIOLATION));
             return errors;
         }
         if (isGroup(actor)) {
