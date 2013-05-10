@@ -1,9 +1,17 @@
 $(function () {
-    var model = {
-        source: ko.observable("").extend({ throttle: 250 }),
+    var sampleStatementA = '{"id":"12345678-1234-5678-1234-567812345678","actor":{"mbox":"mailto:zachary+pierce@gmail.com"},"verb":{"id":"http://adlnet.gov/expapi/verbs/created","display":{"en-US":"created"}},"object":{"id":"http://ZackPierce.github.com/xAPI-Validator-JS", "objectType":"Activity"}}',
+        model;
+
+    function prettifyJsonUnsafe(text) {
+        return JSON.stringify(JSON.parse(text), null, 4);
+    }
+
+    model = {
+        source: ko.observable(prettifyJsonUnsafe(sampleStatementA)).extend({ throttle: 250 }),
         hasReport: ko.observable(false),
         errors: ko.observableArray([])
     };
+
     model.report = ko.computed(function () {
         var r, errs;
         r = xapiValidator.validateStatement(model.source());
