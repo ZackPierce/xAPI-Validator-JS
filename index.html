@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        
+        <link rel="stylesheet" href="css/normalize.min.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/KoGrid.css">
+
+        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.2.0/knockout-min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="js/vendor/koGrid-2.1.1.js"></script>
+        <script src="js/xapiValidator.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="header-container">
+            <header class="wrapper clearfix">
+                <h1 class="title">Experience API Validator</h1>
+            </header>
+        </div>
+
+        <div class="main-container">
+            <div class="main wrapper clearfix">
+
+                <article>
+                    <header>
+                        <h2>Overview</h2>
+                        <p>This site demonstrates the open source <a href="">xAPI Validator Javascript library</a> in action.  Give it a whirl!</p>
+                    </header>
+                    <section>
+                        <h2>Statement JSON</h2>
+                        <p>Insert your xAPI / Tin-Can statement JSON here.</p>
+                        <textarea id="rawJSON" data-bind="value : source, valueUpdate : 'afterkeydown'"></textarea>
+                        <button data-bind="click : formatJson">Format JSON</button>
+                    </section>
+                    <section>
+                        <h2>Validation Results</h2>
+                        <div data-bind="if : report() && report().instance && errors().length == 0">Congratulations! You've entered a completely valid statement!</div>
+                        <div id="gridPlaceholder" class="gridStyle" data-bind="koGrid : gridOptions, visible : report() && errors().length != 0"/>
+                    </section>
+                </article>
+
+                <aside>
+                    <h3>Experience API Background</h3>
+                    <p>TODO</p>
+                    <h3>Caveats</h3>
+                    <p>The validator targets the 1.0.0 version of the Experience API, so statements that may be valid under the 0.9.0 or 0.9.5 versions could display errors.</p>
+                </aside>
+
+            </div> <!-- #main -->
+        </div> <!-- #main-container -->
+
+        <div class="footer-container">
+            <footer class="wrapper">
+                Zachary Pierce from the Innovation Lab at Measured Progress. MIT License, 2013.
+            </footer>
+        </div>
+
+        
+        <!-- <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script> -->
+
+        <script src="js/main.js"></script>
+    </body>
+</html>
