@@ -299,18 +299,26 @@ describe("xapiValidator", function() {
           .to.have.property("length", 1);
       });
       
-      it("the member property's agent reports an error when given an account missing its homepage", function() {
+      it("the member property's agent reports an error when given an account missing its homePage", function() {
         inputStatement.actor.member = [{account:{name:"bob"}}];
-        expect(reportHasErrorWithTracePrefix(xapiValidator.validateStatement(inputStatement), "statement.actor.member[0].account.homepage")).to.be.true;
+        expect(reportHasErrorWithTracePrefix(xapiValidator.validateStatement(inputStatement), "statement.actor.member[0].account.homePage")).to.be.true;
       });
       
       it("the member property's agent reports an error when given an account missing its name", function() {
-        inputStatement.actor.member = [{account:{homepage:"http://example.com"}}];
+        inputStatement.actor.member = [{account:{homePage:"http://example.com"}}];
         expect(reportHasErrorWithTracePrefix(xapiValidator.validateStatement(inputStatement), "statement.actor.member[0].account.name")).to.be.true;
       });
       
+      it("the member property's agent reports an error when given an account with an all-lowercase homepage", function() {
+        inputStatement.actor.member = [{account:{homepage:"http://example.com", name:"bob"}}];
+        var report = xapiValidator.validateStatement(inputStatement);
+        expect(reportHasErrorWithTracePrefix(report, "statement.actor.member[0].account.homepage")).to.be.true;
+        expect(report.errors)
+          .to.have.property("length", 2);
+      });
+
       it("the member property's agent reports no error when given a full account", function() {
-        inputStatement.actor.member = [{account:{homepage:"http://example.com", name: "bob"}}];
+        inputStatement.actor.member = [{account:{homePage:"http://example.com", name: "bob"}}];
         expect(xapiValidator.validateStatement(inputStatement).errors)
           .to.have.property("length", 0);
       });

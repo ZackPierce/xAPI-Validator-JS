@@ -25,8 +25,6 @@
         base64Regex = /^(?:[A-Za-z0-9\+\/]{4})*(?:[A-Za-z0-9\+\/]{2}==|[A-Za-z0-9\+\/]{3}=|[A-Za-z0-9\+\/]{4})$/,
         iriRegex,
         bcp47Regex,
-        isString,
-        isObject,
         isArray,
         ifiPropertyNames = ["mbox", "mbox_sha1sum", "openID", "account"],
         cmiInteractionTypes = ["true-false", "choice", "fill-in",
@@ -40,25 +38,25 @@
 
     bcp47Regex = /^(?:(en-GB-oed|i-(?:ami|bnn|default|enochian|hak|klingon|lux|mingo|navajo|pwn|tao|tay|tsu)|sgn-(?:BE-FR|BE-NL|CH-DE))|(art-lojban|cel-gaulish|no-(?:bok|nyn)|zh-(?:guoyu|hakka|min|min-nan|xiang)))$|^(x(?:-[0-9a-z]{1,8})+)$|^(?:((?:[a-z]{2,3}(?:(?:-[a-z]{3}){1,3})?)|[a-z]{4}|[a-z]{5,8})(?:-([a-z]{4}))?(?:-([a-z]{2}|[0-9]{3}))?((?:-(?:[a-z0-9]{5,8}|[0-9][a-z0-9]{3}))*)?((?:-[0-9a-wy-z](?:-[a-z0-9]{2,8}){1,})*)?(-x(?:-[0-9a-z]{1,8})+)?)$/i;
 
-    isString = function (obj) {
+    function isString(obj) {
         return toString.call(obj) == '[object String]';
-    };
+    }
 
-    isObject = function (obj) {
+    function isObject(obj) {
         return obj === Object(obj);
-    };
+    }
 
     isArray = Array.isArray || function (obj) {
         return toString.call(obj) == '[object Array]';
     };
 
-    isBoolean = function (obj) {
+    function isBoolean(obj) {
         return obj === true || obj === false || toString.call(obj) == '[object Boolean]';
-    };
+    }
 
-    isNumber = function (obj) {
+    function isNumber(obj) {
         return toString.call(obj) == '[object Number]';
-    };
+    }
 
     function isNonNullMapObject(target) {
         return target !== null && isObject(target) && !isArray(target);
@@ -132,12 +130,12 @@
             return makeStatementReport(statement);
         } else {
             return makeV1SingleErrorReport(null, new ValidationError("statement", "Statement argument provided was not a valid object or a valid JSON string.", MUST_VIOLATION));
-        };
+        }
     }
 
     function makeStatementReport(statement) {
         var errors = [];
-        validateStatement(statement, "statement", errors, false)
+        validateStatement(statement, "statement", errors, false);
         return makeV1Report(statement, errors);
     }
 
@@ -237,7 +235,7 @@
     }
 
     function validateIFIProperties(target, trace, errors) {
-        if (target.mbox != undefined && target.mbox !== null) {
+        if (target.mbox !== undefined && target.mbox !== null) {
             if (!isString(target.mbox)) {
                 errors.push(new ValidationError(traceToString(trace, "mbox"), "mbox property was required to be a mailto URI string but was not a string at all.", MUST_VIOLATION));
             } else if (!mailtoUriRegex.test(target.mbox)) {
@@ -248,9 +246,9 @@
         validatePropertyIsUri(target, "openID", trace, errors, false);
         if (target.account != undefined && target.account !== null) {
             var accountTrace = addPropToTrace(trace, "account");
-            validatePropertyIsUri(target.account, "homepage", accountTrace, errors, true);
+            validatePropertyIsUri(target.account, "homePage", accountTrace, errors, true);
             validatePropertyIsString(target.account, "name", accountTrace, errors, true);
-            validateAbsenceOfNonWhitelistedProperties(target.account, ["homepage", "name"], accountTrace, errors);
+            validateAbsenceOfNonWhitelistedProperties(target.account, ["homePage", "name"], accountTrace, errors);
         }
     }
 
