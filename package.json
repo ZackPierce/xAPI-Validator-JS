@@ -1,6 +1,7 @@
 {
   "name": "xapiValidator",
   "version": "1.0.0",
+  "main": "./xapiValidator",
   "author": "Zachary Pierce",
   "description": "A validator for Experience API (xAPI) statements",
   "keywords":["xAPI", "validator", "lrs", "json"],

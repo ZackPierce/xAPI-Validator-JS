@@ -273,7 +273,7 @@
         return localErrors;
     }
 
-    function validateVerb(verb, trace, errors) {
+    exports.validateVerb = function (verb, trace, errors) {
         var localErrors = errors || [],
             localTrace = trace || "verb";
         if (verb === undefined) {
@@ -389,7 +389,7 @@
         return localErrors;
     }
 
-    function validateActivity(activity, trace, errors) {
+    exports.validateActivity = function (activity, trace, errors) {
         var localErrors = errors || [],
             localTrace = trace || "activity";
         if (!isNonNullMapObject(activity)) {
@@ -455,7 +455,7 @@
         return localErrors;
     }
 
-    function validateResult(result, trace, errors) {
+    exports.validateResult = function (result, trace, errors) {
         var localErrors = errors || [],
             localTrace = trace || "result";
         if (result === undefined) {
@@ -573,7 +573,7 @@
         return (actorOrGroup.member !== null && actorOrGroup.member !== undefined) || actorOrGroup.objectType === "Group";
     }
 
-    function validateAgent(agent, trace, errors) {
+    exports.validateAgent = function (agent, trace, errors) {
         var localErrors = errors || [],
             localTrace = trace || "agent",
             ifiCount;
@@ -597,7 +597,7 @@
         return localErrors;
     }
 
-    function validateGroup(group, trace, errors) {
+    exports.validateGroup = function (group, trace, errors) {
         var localErrors = errors || [],
             localTrace = trace || "group",
             memberTrace = addPropToTrace(localTrace, "member"),
@@ -626,7 +626,7 @@
             } else {
                 numMembers = group.member.length;
                 for (i = 0; i < numMembers; i+=1) {
-                    validateAgent(group.member[i], addLookupToTrace(memberTrace, i), localErrors);
+                    exports.validateAgent(group.member[i], addLookupToTrace(memberTrace, i), localErrors);
                 }
             }
         }
@@ -636,7 +636,7 @@
         return localErrors;
     }
 
-    function validateActor(actor, trace, errors) {
+    exports.validateActor = function (actor, trace, errors) {
         var localErrors = errors || [],
             localTrace = trace || "actor";
         if (actor === null || actor === undefined) {
@@ -644,9 +644,9 @@
             return localErrors;
         }
         if (isGroup(actor)) {
-            validateGroup(actor, localTrace, localErrors);
+            exports.validateGroup(actor, localTrace, localErrors);
         } else {
-            validateAgent(actor, localTrace, localErrors);
+            exports.validateAgent(actor, localTrace, localErrors);
         }
         return localErrors;
     }
@@ -662,12 +662,12 @@
             return localErrors;
         }
         if (isGroup(authority)) {
-            validateGroup(authority, localTrace, localErrors);
+            exports.validateGroup(authority, localTrace, localErrors);
             if (!authority.member || !authority.member.length || authority.member.length !== 2) {
                 localErrors.push(new ValidationError(localTraceToString(localTrace, "member"), "If used as a Group, the authority property must contain a member property that is an array containing exactly two Agent objects.", MUST_VIOLATION));
             }
         } else {
-            validateAgent(authority, localTrace, localErrors);
+            exports.validateAgent(authority, localTrace, localErrors);
         }
         return localErrors;
     }
@@ -685,11 +685,11 @@
         } else if (isArray(subContext)) {
             numActivities = subContext.length;
             for (i = 0; i < numActivities; i+=1) {
-                validateActivity(subContext[i], addLookupToTrace(localTrace, i), localErrors);
+                exports.validateActivity(subContext[i], addLookupToTrace(localTrace, i), localErrors);
             }
         } else if (isObject(subContext)) {
             localErrors.push(new ValidationError(localTraceToString(localTrace), "Context Activities property values should prefer to be an array of Activities rather than a single Activity object.", SHOULD_VIOLATION));
-            validateActivity(subContext, localTrace, localErrors);
+            exports.validateActivity(subContext, localTrace, localErrors);
         } else {
             localErrors.push(new ValidationError(localTraceToString(localTrace), "Context Activities property values must be an array of Activity Objects or a single Activity Object.", MUST_VIOLATION));
         }
@@ -715,7 +715,7 @@
         return localErrors;
     }
 
-    function validateContext(context, trace, errors, statementObjectObjectType) {
+    exports.validateContext = function (context, trace, errors, statementObjectObjectType) {
         var localErrors = errors || [],
             localTrace = trace || "context";
         if (context === undefined) {
@@ -740,7 +740,7 @@
         validatePropertyIsString(context, "revision", localTrace, localErrors, false, MUST_VIOLATION);
         validatePropertyIsString(context, "platform", localTrace, localErrors, false, MUST_VIOLATION);
         if (context.team !== undefined) {
-            validateGroup(context.team, addPropToTrace(localTrace, "team"), localErrors);
+            exports.validateGroup(context.team, addPropToTrace(localTrace, "team"), localErrors);
         }
         if (context.contextActivities !== undefined) {
             validateContextActivities(context.contextActivities, addPropToTrace(localTrace, "contextActivities"), localErrors);
@@ -754,9 +754,9 @@
 
         if (context.instructor !== undefined) {
             if (isGroup(context.instructor)) {
-                validateGroup(context.instructor, addPropToTrace(localTrace, "instructor"), localErrors);
+                exports.validateGroup(context.instructor, addPropToTrace(localTrace, "instructor"), localErrors);
             } else {
-                validateAgent(context.instructor, addPropToTrace(localTrace, "instructor"), localErrors);
+                exports.validateAgent(context.instructor, addPropToTrace(localTrace, "instructor"), localErrors);
             }
         }
         validateExtensions(context.extensions, addPropToTrace(localTrace, "extensions"), localErrors);
@@ -766,7 +766,7 @@
         return localErrors;
     }
 
-    function validateObject(object, trace, errors, isWithinSubStatement) {
+    exports.validateObject = function (object, trace, errors, isWithinSubStatement) {
         var localErrors = errors || [],
             localTrace = trace || "object",
             objectType;
@@ -781,11 +781,11 @@
         validatePropertyIsString(object, "objectType", localTrace, localErrors, true, SHOULD_VIOLATION);
         objectType = object.objectType || "Activity";
         if (objectType === "Activity") {
-            validateActivity(object, localTrace, localErrors);
+            exports.validateActivity(object, localTrace, localErrors);
         } else if (objectType === "Agent") {
-            validateAgent(object, localTrace, localErrors);
+            exports.validateAgent(object, localTrace, localErrors);
         } else if (objectType === "Group") {
-            validateGroup(object, localTrace, localErrors);
+            exports.validateGroup(object, localTrace, localErrors);
         } else if (objectType === "StatementRef") {
             validateStatementRef(object, localTrace, localErrors);
         } else if (objectType === "SubStatement") {
@@ -813,13 +813,13 @@
             localErrors.push(new ValidationError(localTraceToString(localTrace, "id"), "Id was not a valid UUID", MUST_VIOLATION));
         }
 
-        validateActor(statement.actor, addPropToTrace(localTrace, "actor"), localErrors);
-        validateVerb(statement.verb, addPropToTrace(localTrace, "verb"), localErrors);
-        validateObject(statement.object, addPropToTrace(localTrace, "object"), localErrors, isSubStatement);
-        validateResult(statement.result, addPropToTrace(localTrace, "result"), localErrors);
+        exports.validateActor(statement.actor, addPropToTrace(localTrace, "actor"), localErrors);
+        exports.validateVerb(statement.verb, addPropToTrace(localTrace, "verb"), localErrors);
+        exports.validateObject(statement.object, addPropToTrace(localTrace, "object"), localErrors, isSubStatement);
+        exports.validateResult(statement.result, addPropToTrace(localTrace, "result"), localErrors);
 
         statementObjectObjectType = statement.object && statement.object.objectType ? statement.object.objectType : "Activity";
-        validateContext(statement.context, addPropToTrace(localTrace, "context"), localErrors, statementObjectObjectType);
+        exports.validateContext(statement.context, addPropToTrace(localTrace, "context"), localErrors, statementObjectObjectType);
         validatePropertyIsISO8601String(statement, "timestamp", localTrace, localErrors);
         validatePropertyIsISO8601String(statement, "stored", localTrace, localErrors);
 
