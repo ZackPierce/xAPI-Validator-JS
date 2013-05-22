@@ -211,7 +211,7 @@
         return localErrors;
     }
 
-    function getIFIs(target) {
+    exports.getIFIs = function (target) {
         var ifis = [],
             i,
             propName,
@@ -230,7 +230,7 @@
     }
 
     function getIFICount(target) {
-        return getIFIs(target).length;
+        return exports.getIFIs(target).length;
     }
 
     function validateExtensions(extensions, trace, errors) {
