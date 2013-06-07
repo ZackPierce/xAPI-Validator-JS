@@ -681,6 +681,81 @@ describe("xapiValidator", function() {
             expect(reportHasErrorWithTracePrefix(results, "statement.object.id", "MUST_VIOLATION")).to.be.true;
         });
       });
+      
+      describe("given a substatement type object", function() {
+          it("should not report an error when valid", function() {
+              var inputStatement = {id : "fd41c918-b88b-4b20-a0a5-a4c32391aaa0",
+                    actor : {mbox:"mailto:agent@example.com"},
+                    verb: { "id":"http://adlnet.gov/expapi/verbs/created", "display":{"en-US":"created"}},
+                    object : { objectType:"SubStatement",
+                      actor : { mbox:"mailto:agent@example.com"},
+                      verb: { "id":"http://adlnet.gov/expapi/verbs/created", "display":{"en-US":"created"}},
+                      object: { id : "http://example.com/myUniqueId", objectType:"Activity"}}};
+                var results = xapiValidator.validateStatement(inputStatement);
+
+                expect(results.errors).to.have.property("length", 0);
+          });
+          
+          it("reports a MUST error when the id property is present", function() {
+              var inputStatement = {id : "fd41c918-b88b-4b20-a0a5-a4c32391aaa0",
+                  actor : {mbox:"mailto:agent@example.com"},
+                  verb: { "id":"http://adlnet.gov/expapi/verbs/created", "display":{"en-US":"created"}},
+                  object : { id: "fd41c918-b88b-4b20-a0a5-a4c32391aaa1",
+                    objectType:"SubStatement",
+                    actor : { mbox:"mailto:agent@example.com"},
+                    verb: { "id":"http://adlnet.gov/expapi/verbs/created", "display":{"en-US":"created"}},
+                    object: { id : "http://example.com/myUniqueId", objectType:"Activity"}}};
+              var results = xapiValidator.validateStatement(inputStatement);
+              
+              expect(results.errors).to.have.property("length", 1);
+              expect(reportHasErrorWithTracePrefix(results, "statement.object.id", "MUST_VIOLATION")).to.be.true;
+          });
+          
+          it("reports a MUST error when the version property is present", function() {
+              var inputStatement = {id : "fd41c918-b88b-4b20-a0a5-a4c32391aaa0",
+                    actor : {mbox:"mailto:agent@example.com"},
+                    verb: { "id":"http://adlnet.gov/expapi/verbs/created", "display":{"en-US":"created"}},
+                    object : { version: "1.0.0",
+                      objectType:"SubStatement",
+                      actor : { mbox:"mailto:agent@example.com"},
+                      verb: { "id":"http://adlnet.gov/expapi/verbs/created", "display":{"en-US":"created"}},
+                      object: { id : "http://example.com/myUniqueId", objectType:"Activity"}}};
+                var results = xapiValidator.validateStatement(inputStatement);
+
+                expect(results.errors).to.have.property("length", 1);
+                expect(reportHasErrorWithTracePrefix(results, "statement.object.version", "MUST_VIOLATION")).to.be.true;
+          });
+          
+          it("reports a MUST error when the stored property is present", function() {
+                var inputStatement = {id : "fd41c918-b88b-4b20-a0a5-a4c32391aaa0",
+                      actor : {mbox:"mailto:agent@example.com"},
+                      verb: { "id":"http://adlnet.gov/expapi/verbs/created", "display":{"en-US":"created"}},
+                      object : { stored: "2013-05-28T07:12:57.245Z",
+                        objectType:"SubStatement",
+                        actor : { mbox:"mailto:agent@example.com"},
+                        verb: { "id":"http://adlnet.gov/expapi/verbs/created", "display":{"en-US":"created"}},
+                        object: { id : "http://example.com/myUniqueId", objectType:"Activity"}}};
+                  var results = xapiValidator.validateStatement(inputStatement);
+                  
+                  expect(results.errors).to.have.property("length", 1);
+                  expect(reportHasErrorWithTracePrefix(results, "statement.object.stored", "MUST_VIOLATION")).to.be.true;
+          });
+          
+          it("reports a MUST error when the authority property is present", function() {
+                var inputStatement = {id : "fd41c918-b88b-4b20-a0a5-a4c32391aaa0",
+                      actor : {mbox:"mailto:agent@example.com"},
+                      verb: { "id":"http://adlnet.gov/expapi/verbs/created", "display":{"en-US":"created"}},
+                      object : { authority: { mbox:"mailto:agent@example.com" },
+                        objectType:"SubStatement",
+                        actor : { mbox:"mailto:agent@example.com"},
+                        verb: { "id":"http://adlnet.gov/expapi/verbs/created", "display":{"en-US":"created"}},
+                        object: { id : "http://example.com/myUniqueId", objectType:"Activity"}}};
+                  var results = xapiValidator.validateStatement(inputStatement);
+
+                  expect(results.errors).to.have.property("length", 1);
+                  expect(reportHasErrorWithTracePrefix(results, "statement.object.authority", "MUST_VIOLATION")).to.be.true;
+          });
+      });
 
       describe("given a non-Object results property", function() {
         it("if null, produces an error", function() {
